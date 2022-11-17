@@ -12,16 +12,15 @@ namespace Lib.Extensions
         {
             var query = new QueryExpression(EnvironmentVariableDefinition.EntityLogicalName)
             {
-                ColumnSet = new ColumnSet(
-                    nameof(EnvironmentVariableDefinition.DefaultValue).ToLower())
+                ColumnSet = new ColumnSet(EnvironmentVariableDefinition.Fields.DefaultValue)
             };
-            query.Criteria.AddCondition(nameof(EnvironmentVariableDefinition.SchemaName).ToLower(), 
+            query.Criteria.AddCondition(EnvironmentVariableDefinition.Fields.SchemaName, 
                 ConditionOperator.Equal, environmentVariableName);
             var linkEnvironmentVariableValue = query.AddLink(EnvironmentVariableValue.EntityLogicalName,
-                nameof(EnvironmentVariableDefinition.EnvironmentVariableDefinitionId).ToLower(),
-                nameof(EnvironmentVariableValue.EnvironmentVariableDefinitionId).ToLower(),
+                EnvironmentVariableDefinition.Fields.EnvironmentVariableDefinitionId,
+                EnvironmentVariableValue.Fields.EnvironmentVariableDefinitionId,
                 JoinOperator.LeftOuter);
-            linkEnvironmentVariableValue.Columns = new ColumnSet(nameof(EnvironmentVariableValue.Value).ToLower());
+            linkEnvironmentVariableValue.Columns = new ColumnSet(EnvironmentVariableValue.Fields.Value);
             linkEnvironmentVariableValue.EntityAlias = "ev";
 
             var result = service.RetrieveMultiple(query);

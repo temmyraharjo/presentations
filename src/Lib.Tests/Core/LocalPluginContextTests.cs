@@ -16,7 +16,7 @@ namespace Lib.Tests.Core
             var entityDefinition = new EnvironmentVariableDefinition
             {
                 Id = Guid.NewGuid(),
-                SchemaName = "dev_featureflag",
+                SchemaName = "dev_FeatureFlag",
                 DefaultValue = @"{'IsLog': true, 'IsAzureApplicationInsight': true, 'IsPluginTraceLog': true, 'RoundingStrategy': 'ToEven'}"
             };
             var entityDefinitionValue = new EnvironmentVariableValue()
@@ -53,7 +53,7 @@ namespace Lib.Tests.Core
             var entityDefinition = new EnvironmentVariableDefinition
             {
                 Id = Guid.NewGuid(),
-                SchemaName = "dev_featureflag",
+                SchemaName = "dev_FeatureFlag",
                 DefaultValue = @"{'IsLog': true, 'IsAzureApplicationInsight': true, 'IsPluginTraceLog': true}"
             };
 

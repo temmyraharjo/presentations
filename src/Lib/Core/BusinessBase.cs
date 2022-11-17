@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Lib.Core.Rounding;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -12,11 +13,11 @@ namespace Lib.Core
         public IEntityWrapper<TEntity> Wrapper { get; }
         public IOrganizationService Service => Context.InitiatingUserService;
 
-        public BusinessBase(ILocalPluginContext context)
+        protected BusinessBase(ILocalPluginContext context)
         {
             Context = context;
 
-            var target = GetTarget();
+            var target = context.GetTarget<TEntity>();
             var initial = GetInitial(target.LogicalName, target.Id);
             Wrapper = new EntityWrapper<TEntity>(target, initial);
         }
@@ -33,28 +34,6 @@ namespace Lib.Core
                 Service.Retrieve(logicalName, id, new ColumnSet(true));
 
             return initial.ToEntity<TEntity>();
-        }
-
-        private TEntity GetTarget()
-        {
-            TEntity target;
-            switch (Context.PluginExecutionContext.MessageName)
-            {
-                case "Create":
-                case "Update":
-                    target = ((Entity)Context.PluginExecutionContext.InputParameters["Target"]).ToEntity<TEntity>();
-                    break;
-                case "Delete":
-                    var entityRef = (EntityReference)Context.PluginExecutionContext.InputParameters["Target"];
-                    target = Service.Retrieve(entityRef.LogicalName, entityRef.Id, new ColumnSet(true))
-                        .ToEntity<TEntity>();
-                    break;
-                    default:
-                        throw new InvalidPluginExecutionException(
-                            $"Plugin step {Context.PluginExecutionContext.MessageName} is not supported.");
-            }
-
-            return target;
         }
 
         public virtual void Execute()

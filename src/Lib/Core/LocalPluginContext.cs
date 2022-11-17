@@ -50,7 +50,7 @@ namespace Lib.Core
 
         private Feature GetFeature(IOrganizationService service)
         {
-            var feature = service.GetEnvironmentVariable("dev_featureflag");
+            var feature = service.GetEnvironmentVariable("dev_FeatureFlag");
             if (feature == null) return new Feature();
 
             var json = feature.Attributes.Contains("ev.value")

@@ -19,7 +19,7 @@ namespace Lib.Core.Rounding
         public Guid Create(Entity entity)
         {
             entity.SanitizeMoney(_feature);
-            return _service.Create(entity);
+            return _service.Create(entity.ToEntity<Entity>());
         }
 
         public Entity Retrieve(string entityName, Guid id, ColumnSet columnSet)
@@ -32,7 +32,7 @@ namespace Lib.Core.Rounding
         public void Update(Entity entity)
         {
            entity.SanitizeMoney(_feature);
-           _service.Update(entity);
+           _service.Update(entity.ToEntity<Entity>());
         }
 
         public void Delete(string entityName, Guid id)

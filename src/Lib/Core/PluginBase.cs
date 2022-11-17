@@ -8,7 +8,7 @@ namespace Lib.Core
     {
         protected string PluginClassName { get; }
 
-        internal PluginBase(Type pluginClassName)
+        protected PluginBase(Type pluginClassName)
         {
             PluginClassName = pluginClassName.ToString();
         }
@@ -31,11 +31,10 @@ namespace Lib.Core
             try
             {
                 ExecuteDataversePlugin(localPluginContext);
-                return;
             }
             catch (FaultException<OrganizationServiceFault> orgServiceFault)
             {
-                localPluginContext.Trace($"Exception: {orgServiceFault.ToString()}");
+                localPluginContext.Trace($"Exception: {orgServiceFault}");
 
                 throw new InvalidPluginExecutionException($"OrganizationServiceFault: {orgServiceFault.Message}", orgServiceFault);
             }

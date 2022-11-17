@@ -1,0 +1,8 @@
+{
+  "IsLog": true,
+  "IsAzureApplicationInsight": true,
+  "IsPluginTraceLog": true,
+  "IsRounding": true,
+  "RoundingDigit": 2,
+  "RoundingStrategy": "ToEven"
+}
