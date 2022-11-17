@@ -18,9 +18,8 @@ namespace DemoPlugin
 
         public class Output
         {
-            public Guid? Id { get; set; }
+            public Guid Id { get; set; }
             public string LogicalName { get; set; }
-            public string Error { get; set; }
         }
         public DemoApi() : base(typeof(DemoApi))
         {
@@ -28,35 +27,28 @@ namespace DemoPlugin
 
         protected override void ExecuteDataversePlugin(ILocalPluginContext localPluginContext)
         {
-            var output = new Output();
-            try
-            {
-                localPluginContext.Trace("Hello world from Custom API!");
+            localPluginContext.Trace("Hello world from Custom API!");
 
-                var input = JsonConvert.DeserializeObject<Input>(localPluginContext.PluginExecutionContext
-                    .InputParameters[nameof(Input)].ToString());
-                if (input == null) throw new ArgumentNullException(nameof(Input));
+            var input = JsonConvert.DeserializeObject<Input>(localPluginContext.PluginExecutionContext
+                .InputParameters[nameof(Input)].ToString());
+            if (input == null) throw new ArgumentNullException(nameof(Input));
 
-                var calculation = new dev_Calculation
-                {
-                    dev_Number = input.Name,
-                    dev_PricePerUnit = new Money(input.PricePerUnit),
-                    dev_Discount = input.Discount.HasValue ? new Money(input.Discount.Value) : null,
-                    dev_Qty = input.Qty
-                };
+            var calculation = new dev_Calculation
+            {
+                dev_Number = input.Name,
+                dev_PricePerUnit = new Money(input.PricePerUnit),
+                dev_Discount = input.Discount.HasValue ? new Money(input.Discount.Value) : null,
+                dev_Qty = input.Qty
+            };
 
-                output.Id = localPluginContext.InitiatingUserService.Create(calculation.ToEntity<Entity>());
-                output.LogicalName = dev_Calculation.EntityLogicalName;
-            }
-            catch (Exception ex)
+            var output = new Output
             {
-                output.Error = ex.Message;
-            }
-            finally
-            {
-                localPluginContext.PluginExecutionContext.OutputParameters[nameof(Output)] = 
-                    JsonConvert.SerializeObject(output);
-            }
+                Id = localPluginContext.InitiatingUserService.Create(calculation.ToEntity<Entity>()),
+                LogicalName = dev_Calculation.EntityLogicalName
+            };
+
+            localPluginContext.PluginExecutionContext.OutputParameters[nameof(Output)] =
+                JsonConvert.SerializeObject(output);
         }
     }
 }

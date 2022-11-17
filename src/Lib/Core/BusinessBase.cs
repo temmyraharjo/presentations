@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using Lib.Core.Rounding;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace Lib.Core
 {
     public abstract class BusinessBase<TEntity>
-        where TEntity: Entity
+        where TEntity : Entity
     {
         public ILocalPluginContext Context { get; }
         public IEntityWrapper<TEntity> Wrapper { get; }
@@ -31,7 +30,9 @@ namespace Lib.Core
                       Context.PluginExecutionContext.PreEntityImages.Any()
                         ? Context.PluginExecutionContext.PreEntityImages.FirstOrDefault().Value
                         : null) ??
-                Service.Retrieve(logicalName, id, new ColumnSet(true));
+                (Context.PluginExecutionContext.Stage < 30 && Context.PluginExecutionContext.MessageName == "Create" ? 
+                    (Entity)Context.PluginExecutionContext.InputParameters["Target"] :
+                    Service.Retrieve(logicalName, id, new ColumnSet(true)));
 
             return initial.ToEntity<TEntity>();
         }
