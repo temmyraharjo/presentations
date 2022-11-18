@@ -7,7 +7,6 @@ namespace Lib.Core
 {
     public class LocalTracingService : ITracingService
     {
-        private readonly Feature _feature;
         private readonly ITracingService _tracingService;
         private readonly ILogger _logger;
 
@@ -15,7 +14,6 @@ namespace Lib.Core
 
         public LocalTracingService(IServiceProvider serviceProvider, Feature feature)
         {
-            _feature = feature;
             DateTime utcNow = DateTime.UtcNow;
 
             var context = (IExecutionContext)serviceProvider.GetService(typeof(IExecutionContext));
@@ -26,9 +24,9 @@ namespace Lib.Core
             {
                 initialTimestamp = utcNow;
             }
-            _tracingService = _feature.IsLog && _feature.IsPluginTraceLog ? 
+            _tracingService = feature.IsLog && feature.IsPluginTraceLog ? 
                 (ITracingService)serviceProvider.GetService(typeof(ITracingService)) : null;
-            _logger = _feature.IsLog && _feature.IsAzureApplicationInsight
+            _logger = feature.IsLog && feature.IsAzureApplicationInsight
                 ? (ILogger)serviceProvider.GetService(typeof(ILogger))
                 : null;
 

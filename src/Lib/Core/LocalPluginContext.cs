@@ -37,15 +37,18 @@ namespace Lib.Core
 
             Feature = feature ?? GetFeature(OrgSvcFactory.CreateOrganizationService(null));
 
-            PluginUserService = new RoundingService(
-                serviceProvider.GetOrganizationService(PluginExecutionContext.UserId), Feature); // User that the plugin is registered to run as, Could be same as current user.
+            PluginUserService = GetOrganizationService(PluginExecutionContext.UserId); // User that the plugin is registered to run as, Could be same as current user.
 
-            InitiatingUserService = new RoundingService(
-                serviceProvider.GetOrganizationService(PluginExecutionContext.InitiatingUserId), Feature); //User who's action called the plugin.
+            InitiatingUserService = GetOrganizationService(PluginExecutionContext.InitiatingUserId); //User who's action called the plugin.
 
-            AdminService = new RoundingService(OrgSvcFactory.CreateOrganizationService(null), Feature);
+            AdminService = GetOrganizationService();
 
             TracingService = new LocalTracingService(serviceProvider, Feature);
+        }
+
+        private IOrganizationService GetOrganizationService(Guid? userId = null)
+        {
+            return new RoundingService(OrgSvcFactory.CreateOrganizationService(userId), Feature);
         }
 
         private Feature GetFeature(IOrganizationService service)

@@ -18,7 +18,6 @@ namespace Lib.Tests
                 .UseCrud()
                 .SetLicense(FakeXrmEasyLicense.NonCommercial)
                 .Build();
-
             context.EnableProxyTypes(Assembly.GetAssembly(typeof(Contact)));
             context.Initialize(entities);
 

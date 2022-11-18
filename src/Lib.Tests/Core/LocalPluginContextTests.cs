@@ -1,6 +1,7 @@
 ﻿using System;
+using FakeXrmEasy.Abstractions;
+using FakeXrmEasy.Plugins;
 using Lib.Core;
-using Lib.Core.FeatureFlags;
 using Lib.Entities;
 using Microsoft.Xrm.Sdk;
 using NSubstitute;
@@ -10,6 +11,24 @@ namespace Lib.Tests.Core
 {
     public class LocalPluginContextTests : TestBase
     {
+        private ILocalPluginContext GetContext(IXrmFakedContext testContext)
+        {
+            var orgServiceFactory = Substitute.For<IOrganizationServiceFactory>();
+
+            orgServiceFactory.CreateOrganizationService(Arg.Any<Guid?>())
+                .Returns(testContext.GetOrganizationService());
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(IOrganizationServiceFactory))
+                .Returns(orgServiceFactory);
+            serviceProvider.GetService(typeof(IExecutionContext))
+                .Returns(Substitute.For<IExecutionContext>());
+            serviceProvider.GetService(typeof(IPluginExecutionContext))
+                .Returns(testContext.GetDefaultPluginContext());
+
+
+            return new LocalPluginContext(serviceProvider);
+        }
+
         [Fact]
         public void Check_get_feature_property()
         {
@@ -27,20 +46,8 @@ namespace Lib.Tests.Core
             };
 
             var testContext = InitializeFakedContext(entityDefinition, entityDefinitionValue);
-            var orgServiceFactory = Substitute.For<IOrganizationServiceFactory>();
 
-            orgServiceFactory.CreateOrganizationService(Arg.Any<Guid?>())
-                .Returns(testContext.GetOrganizationService());
-
-            var serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(IOrganizationServiceFactory))
-                .Returns(orgServiceFactory);
-            serviceProvider.GetService(typeof(IExecutionContext))
-                .Returns(Substitute.For<IExecutionContext>());
-            serviceProvider.GetService(typeof(IPluginExecutionContext))
-                .Returns(Substitute.For<IPluginExecutionContext>());
-
-            var pluginBase = new LocalPluginContext(serviceProvider);
+            var pluginBase = GetContext(testContext);
             Assert.True(pluginBase.Feature.IsLog);
             Assert.True(pluginBase.Feature.IsAzureApplicationInsight);
             Assert.False(pluginBase.Feature.IsPluginTraceLog);
@@ -58,20 +65,8 @@ namespace Lib.Tests.Core
             };
 
             var testContext = InitializeFakedContext(entityDefinition);
-            var orgServiceFactory = Substitute.For<IOrganizationServiceFactory>();
 
-            orgServiceFactory.CreateOrganizationService(Arg.Any<Guid?>())
-                .Returns(testContext.GetOrganizationService());
-
-            var serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(IOrganizationServiceFactory))
-                .Returns(orgServiceFactory);
-            serviceProvider.GetService(typeof(IExecutionContext))
-                .Returns(Substitute.For<IExecutionContext>());
-            serviceProvider.GetService(typeof(IPluginExecutionContext))
-                .Returns(Substitute.For<IPluginExecutionContext>());
-
-            var pluginBase = new LocalPluginContext(serviceProvider);
+            var pluginBase = GetContext(testContext);
             Assert.True(pluginBase.Feature.IsLog);
             Assert.True(pluginBase.Feature.IsAzureApplicationInsight);
             Assert.True(pluginBase.Feature.IsPluginTraceLog);

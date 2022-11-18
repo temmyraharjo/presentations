@@ -9,16 +9,28 @@ namespace Lib.Core
         where TEntity : Entity
     {
         public ILocalPluginContext Context { get; }
-        public IEntityWrapper<TEntity> Wrapper { get; }
+        private IEntityWrapper<TEntity> _wrapper;
+
+        public IEntityWrapper<TEntity> Wrapper
+        {
+            get
+            {
+                if (_wrapper == null)
+                {
+                    var target = Context.GetTarget<TEntity>();
+                    var initial = GetInitial(target.LogicalName, target.Id);
+                    _wrapper = new EntityWrapper<TEntity>(target, initial);
+                }
+
+                return _wrapper;
+            }
+        }
+
         public IOrganizationService Service => Context.InitiatingUserService;
 
         protected BusinessBase(ILocalPluginContext context)
         {
             Context = context;
-
-            var target = context.GetTarget<TEntity>();
-            var initial = GetInitial(target.LogicalName, target.Id);
-            Wrapper = new EntityWrapper<TEntity>(target, initial);
         }
 
         private TEntity GetInitial(string logicalName, Guid id)
