@@ -32,6 +32,9 @@ namespace Lib.Tests.Core
             Assert.Equal(contact.JobTitle, wrapper.Latest.JobTitle);
             Assert.Equal(target.Address1_City, wrapper.Latest.Address1_City);
             Assert.Equal(target.ParentCustomerId.Id, wrapper.Latest.ParentCustomerId.Id);
+
+            wrapper.Target.FirstName = "New";
+            Assert.Equal("New", wrapper.Latest.FirstName);
         }
 
         [Fact]
@@ -59,6 +62,10 @@ namespace Lib.Tests.Core
             Assert.Equal(contact.JobTitle, latest.JobTitle);
             Assert.Equal(target.Address1_City, latest.Address1_City);
             Assert.Equal(target.ParentCustomerId.Id, latest.ParentCustomerId.Id);
+
+
+            wrapper.Target["firstname"] = "New";
+            Assert.Equal("New", wrapper.Latest["firstname"]);
         }
     }
 }

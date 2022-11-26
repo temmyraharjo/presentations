@@ -2,6 +2,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4bd4a6e0_002Decee_002D483f_002Db564_002Df8b483321c66/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Create_calculation" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::6608D4E6-4866-48FE-B15C-CB695A9928A2::.NETFramework,Version=v4.6.2::Lib.Tests.Features.DemoApiBusinessTests.Create_calculation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::6608D4E6-4866-48FE-B15C-CB695A9928A2::.NETFramework,Version=v4.6.2::Lib.Tests.Core.EntityWrapperTests.Check_early_bound&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6e669441_002D6f11_002D4615_002D84f4_002D3e768d58139d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Check_get_feature_property_without_environment_variable_value" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

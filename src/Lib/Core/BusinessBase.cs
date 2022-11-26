@@ -15,12 +15,11 @@ namespace Lib.Core
         {
             get
             {
-                if (_wrapper == null)
-                {
-                    var target = Context.GetTarget<TEntity>();
-                    var initial = GetInitial(target.LogicalName, target.Id);
-                    _wrapper = new EntityWrapper<TEntity>(target, initial);
-                }
+                if (_wrapper != null) return _wrapper;
+
+                var target = Context.GetTarget<TEntity>();
+                var initial = GetInitial(target.LogicalName, target.Id);
+                _wrapper = new EntityWrapper<TEntity>(target, initial);
 
                 return _wrapper;
             }

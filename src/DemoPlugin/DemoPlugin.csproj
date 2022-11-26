@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Lib\Lib.csproj">
       <ReferenceOutputAssembly>True</ReferenceOutputAssembly>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
 
